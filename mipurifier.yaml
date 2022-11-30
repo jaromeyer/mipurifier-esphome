@@ -1,9 +1,10 @@
 esphome:
   name: mipurifier
-  comment: ESPHome for Xiaomi Mi Air Purifier 3H (and similar models probably too)
+  comment: for Xiaomi Mi Air Purifier 3H (and similar models using the same protocol)
   includes:
-    - mipurifier.h
+  - mipurifier.h
 
+# Required configuration for the weird single core ESP-WROOM-32D module
 esp32:
   board: esp32doit-devkit-v1
   framework:
@@ -32,33 +33,35 @@ wifi:
     ssid: "Mipurifier Fallback Hotspot"
     password: "PyCfsbmzuMbj"
 
+# Initialize the serial connection to the STM32 microcontroller
 uart:
   id: uart_bus
   tx_pin: GPIO17
   rx_pin: GPIO16
   baud_rate: 115200
 
-fan:
-- platform: speed
-  output: fan_speed
-  name: "Mi Air Purifier"
-
-output:
+# Main switch for turning on/off the unit
+switch:
 - platform: custom
-  type: float
   lambda: |-
-    auto mipurifier = MiPurifierSensor::getInstance(id(uart_bus));
+    MiPurifier *mipurifier = MiPurifier::getInstance(id(uart_bus));
     App.register_component(mipurifier);
     return {mipurifier};
-  outputs:
-    id: fan_speed
+  switches:
+  - name: "Power"
 
+# Expose measured environmental values, remaining filter life, and the speed level in manual mode
 sensor:
 - platform: custom
   lambda: |-
-    auto mipurifier = MiPurifierSensor::getInstance(id(uart_bus));
-    App.register_component(mipurifier);
-    return {mipurifier->airquality_sensor, mipurifier->humidity_sensor, mipurifier->temperature_sensor};
+    MiPurifier *mipurifier = MiPurifier::getInstance(id(uart_bus));
+    return {
+      mipurifier->airquality_sensor,
+      mipurifier->humidity_sensor,
+      mipurifier->temperature_sensor,
+      mipurifier->filterlife_sensor,
+      mipurifier->manualspeed_sensor
+    };
   sensors:
   - name: "Air quality (PM2.5)"
     unit_of_measurement: "µg/m³"
@@ -68,5 +71,19 @@ sensor:
     device_class: humidity
   - name: "Temperature"
     unit_of_measurement: "°C"
-    accuracy_decimals: 1
     device_class: temperature
+    accuracy_decimals: 1
+  - name: "Filter remaining"
+    unit_of_measurement: "%"
+    icon: mdi:air-filter
+  - name: "Manual Speed"
+    icon: mdi:fan
+
+# Expose the current mode as a text sensor
+text_sensor:
+- platform: custom
+  lambda: |-
+    MiPurifier *mipurifier = MiPurifier::getInstance(id(uart_bus));
+    return {mipurifier->mode_sensor};
+  text_sensors:
+    name: "Mode"
