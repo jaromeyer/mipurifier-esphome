@@ -71,7 +71,7 @@ class MiPurifierSensor :
             write_str("down set_properties 2 2 true");
             turn_on = false;
           } else if (strlen(cmd_buffer) > 0) {
-            ESP_LOGD("custom", cmd_buffer);
+            //ESP_LOGD("custom", cmd_buffer);
             write_str(cmd_buffer);
             cmd_buffer[0] = '\0';
           } else {
