@@ -1,0 +1,72 @@
+esphome:
+  name: mipurifier
+  comment: ESPHome for Xiaomi Mi Air Purifier 3H (and similar models probably too)
+  includes:
+    - mipurifier.h
+
+esp32:
+  board: esp32doit-devkit-v1
+  framework:
+    type: esp-idf
+    sdkconfig_options:
+      CONFIG_FREERTOS_UNICORE: y
+    advanced:
+      ignore_efuse_mac_crc: true
+
+# Enable logging
+logger:
+
+# Enable Home Assistant API
+api:
+  password: ""
+
+ota:
+  password: ""
+
+wifi:
+  ssid: "<Your SSID>"
+  password: "<Your password>"
+
+  # Enable fallback hotspot (captive portal) in case wifi connection fails
+  ap:
+    ssid: "Mipurifier Fallback Hotspot"
+    password: "PyCfsbmzuMbj"
+
+uart:
+  id: uart_bus
+  tx_pin: GPIO17
+  rx_pin: GPIO16
+  baud_rate: 115200
+
+fan:
+- platform: speed
+  output: fan_speed
+  name: "Mi Air Purifier"
+
+output:
+- platform: custom
+  type: float
+  lambda: |-
+    auto mipurifier = MiPurifierSensor::getInstance(id(uart_bus));
+    App.register_component(mipurifier);
+    return {mipurifier};
+  outputs:
+    id: fan_speed
+
+sensor:
+- platform: custom
+  lambda: |-
+    auto mipurifier = MiPurifierSensor::getInstance(id(uart_bus));
+    App.register_component(mipurifier);
+    return {mipurifier->airquality_sensor, mipurifier->humidity_sensor, mipurifier->temperature_sensor};
+  sensors:
+  - name: "Air quality (PM2.5)"
+    unit_of_measurement: "µg/m³"
+    device_class: pm25
+  - name: "Humidity"
+    unit_of_measurement: "%"
+    device_class: humidity
+  - name: "Temperature"
+    unit_of_measurement: "°C"
+    accuracy_decimals: 1
+    device_class: temperature
