@@ -12,3 +12,7 @@ There are two separate microcontrollers inside the device: one STM32F4 which act
 ### FAQ
 #### Does this remove the `Filter remaining 0%` warning?
 Flashing this firware does NOT change anything about how the remaining filter life is read/managed. However you can easily reset your filter to continue using it by following [this video](https://www.youtube.com/watch?v=usiX_J9Yy2o) for example.
+
+### Flashing
+Connect any USB-to-serial adapter and power on the ESP32 while `GPIO0` and `GPIO2` are pulled low.
+![image](https://user-images.githubusercontent.com/36965186/218741519-1f2bf1ba-cb44-488f-9ee8-803aed071dc3.jpeg)
