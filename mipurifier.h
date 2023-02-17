@@ -1,18 +1,18 @@
 #include "esphome.h"
 
-class MiPurifier :
-  public Component,
-  public UARTDevice,
-  public CustomAPIDevice,
-  public Switch {
-
- private:
+class MiPurifier : public Component, public UARTDevice, public CustomAPIDevice, public Switch {
+public:
   static const int max_line_length = 80;
   char recv_buffer[max_line_length];
   char send_buffer[max_line_length];
   bool is_preset;
-  int last_heartbeat;
+  int last_heartbeat, last_query;
   
+  Sensor *airquality_sensor = new Sensor();
+  Sensor *humidity_sensor = new Sensor();
+  Sensor *temperature_sensor = new Sensor();
+  Sensor *filterlife_sensor = new Sensor();
+
   MiPurifier(UARTComponent *uart) : UARTDevice(uart) {}
 
   int readline(int readch, char *buffer, int len) {
@@ -36,32 +36,8 @@ class MiPurifier :
     return -1;
   }
 
- public:
-  // numerical sensors
-  Sensor *airquality_sensor = new Sensor();
-  Sensor *humidity_sensor = new Sensor();
-  Sensor *temperature_sensor = new Sensor();
-  Sensor *filterlife_sensor = new Sensor();
-  Sensor *manualspeed_sensor = new Sensor();
-
-  // text sensor
-  TextSensor *mode_sensor = new TextSensor();
-
-  // return a singelton of MiPurifier
-  static MiPurifier *getInstance(UARTComponent *uart) {
-    static MiPurifier *instance = new MiPurifier(uart);
-    return instance;
-  }
-
   // only run setup() after a Wi-Fi connection has been established successfully
   float get_setup_priority() const override { return esphome::setup_priority::AFTER_WIFI; } 
-
-  void setup() override {
-    register_service(&MiPurifier::set_mode, "set_mode", {"mode"});
-    register_service(&MiPurifier::set_manualspeed, "set_manualspeed", {"speed"});
-    register_service(&MiPurifier::send_command, "send_command", {"command"});
-    strcpy(send_buffer, "down get_properties 2 2 3 6 3 7 3 8 2 5 4 3 10 10");
-  }
 
   void write_state(bool state) override {
     // turn purifier on/off
@@ -114,13 +90,13 @@ class MiPurifier :
       is_preset = false;
       switch (atoi(val)) {
         case 0:
-          mode_sensor->publish_state("auto");
+          mode->publish_state("auto");
           break;
         case 1:
-          mode_sensor->publish_state("night");
+          mode->publish_state("night");
           break;
         case 2:
-          mode_sensor->publish_state("manual");
+          mode->publish_state("manual");
           break;
         case 3:
           is_preset = true;
@@ -131,20 +107,25 @@ class MiPurifier :
       if (is_preset) {
         switch (atoi(val)) {
           case 1:
-            mode_sensor->publish_state("low");
+            mode->publish_state("low");
             break;
           case 2:
-            mode_sensor->publish_state("medium");
+            mode->publish_state("medium");
             break;
           case 3:
-            mode_sensor->publish_state("high");
+            mode->publish_state("high");
             break;
         }
       }
     } else if (strcmp(id, "1010") == 0) {
       // manual speed
-      manualspeed_sensor->publish_state(atof(val));
+      manualspeed->publish_state(atof(val)+1);
     }
+  }
+
+  void setup() override {
+    register_service(&MiPurifier::send_command, "send_command", {"command"});
+    strcpy(send_buffer, "down get_properties 2 2 3 6 3 7 3 8 2 5 4 3 10 10");
   }
   
   void loop() override {
@@ -167,6 +148,10 @@ class MiPurifier :
             write_str("down set_properties 13 9 60");
             last_heartbeat = millis();
             ESP_LOGD("purifier", "sent heartbeat");
+          } else if (millis() - last_query > 60000) {
+            write_str("down get_properties 2 2 3 6 3 7 3 8 2 5 4 3 10 10");
+            last_query = millis();
+            ESP_LOGD("purifier", "sent ");
           } else {
             write_str("down none");
           }
