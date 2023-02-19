@@ -2,7 +2,7 @@ esphome:
   name: mipurifier
   comment: for Xiaomi Mi Air Purifier 3H (and similar models using the same protocol)
   includes:
-  - mipurifier.h
+    - mipurifier.h
 
 # Required configuration for the weird single core ESP-WROOM-32D module
 esp32:
