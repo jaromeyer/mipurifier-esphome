@@ -9,6 +9,7 @@ There are two separate microcontrollers inside the device: one STM32F4 which act
 - exposing PM2.5, humidity, temperature, and remaining filter life as sensor values
 - switching modes
 - controlling speed in manual mode
+- changing various settings (display brightness, beeper, lock)
 - sending custom commands using the `esphome.mipurifier_send_command` service (e.g. sending `down set_properties 5 1 false` disables beeping)
 
 ### FAQ
