@@ -14,7 +14,7 @@ There are two separate microcontrollers inside the device: one STM32F4 which act
 
 ### FAQ
 #### Does this remove the `Filter remaining 0%` warning?
-Flashing this firware does NOT change anything about how the remaining filter life is read/managed. However you can easily reset your filter to continue using it by following [this video](https://www.youtube.com/watch?v=usiX_J9Yy2o) for example.
+Flashing this firmware does NOT change anything about how the remaining filter life is read/managed. However you can easily reset your filter to continue using it by following [this video](https://www.youtube.com/watch?v=usiX_J9Yy2o) for example.
 
 #### Is my air purifier supported?
 The following devices are known to work with this library (this list is not exhaustive)
