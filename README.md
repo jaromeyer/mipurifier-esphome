@@ -16,6 +16,13 @@ There are two separate microcontrollers inside the device: one STM32F4 which act
 #### Does this remove the `Filter remaining 0%` warning?
 Flashing this firware does NOT change anything about how the remaining filter life is read/managed. However you can easily reset your filter to continue using it by following [this video](https://www.youtube.com/watch?v=usiX_J9Yy2o) for example.
 
+#### Is my air purifier supported?
+The following devices are known to work with this library (this list is not exhaustive)
+- Xiaomi Air Purifier 3H (mb3)
+- Zhimi Air Purifier 3 (ma4)
+
+Please don't hesitate to expand this list by opening a pull request if your device also works with this library! Make sure to backup the original firmware on your device's ESP32 before flashing ESPHome.
+
 ### Flashing
 Connect any USB-to-serial adapter and power on the ESP32 while `GPIO0` and `GPIO2` are pulled low.
 <image src="https://user-images.githubusercontent.com/36965186/218741519-1f2bf1ba-cb44-488f-9ee8-803aed071dc3.jpeg" width=500>
