@@ -18,8 +18,8 @@ Flashing this firmware does NOT change anything about how the remaining filter l
 
 #### Is my air purifier supported?
 The following devices are known to work with this library (this list is not exhaustive)
-- Xiaomi Air Purifier 3H (mb3)
-- Zhimi Air Purifier 3 (ma4)
+- Air Purifier 3 (2019) (zhimi.airpurifier.ma4)
+- Air Purifier 3H (2019) (zhimi.airpurifier.mb3)
 
 Please don't hesitate to expand this list by opening a pull request if your device also works with this library! Make sure to backup the original firmware on your device's ESP32 before flashing ESPHome.
 
