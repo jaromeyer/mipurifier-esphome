@@ -1,4 +1,4 @@
-## ESPHome for the Xiaomi Mi Air Purifier 3H (and similar devices using the same protocol)
+## ESPHome for various Xiaomi Air Purification Devices
 
 <p align="center"><img src="https://user-images.githubusercontent.com/36965186/219659691-6d8e733f-ae2f-4480-80ee-f5e90c9bd8f8.jpeg" width="400"></p>
 
@@ -14,7 +14,14 @@ There are two separate microcontrollers inside the device: one STM32F4 which act
 
 ### FAQ
 #### Does this remove the `Filter remaining 0%` warning?
-Flashing this firware does NOT change anything about how the remaining filter life is read/managed. However you can easily reset your filter to continue using it by following [this video](https://www.youtube.com/watch?v=usiX_J9Yy2o) for example.
+Flashing this firmware does NOT change anything about how the remaining filter life is read/managed. However you can easily reset your filter to continue using it by following [this video](https://www.youtube.com/watch?v=usiX_J9Yy2o) for example.
+
+#### Is my air purifier supported?
+The following devices are known to work with this library (this list is not exhaustive)
+- Air Purifier 3 (2019) (zhimi.airpurifier.ma4)
+- Air Purifier 3H (2019) (zhimi.airpurifier.mb3)
+
+Please don't hesitate to expand this list by opening a pull request if your device also works with this library! Make sure to backup the original firmware on your device's ESP32 before flashing ESPHome.
 
 ### Flashing
 Connect any USB-to-serial adapter and power on the ESP32 while `GPIO0` and `GPIO2` are pulled low.
