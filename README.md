@@ -1,4 +1,4 @@
-## ESPHome for the Xiaomi Mi Air Purifier 3H (and similar devices using the same protocol)
+## ESPHome for various Xiaomi Air Purification Devices
 
 <p align="center"><img src="https://user-images.githubusercontent.com/36965186/219659691-6d8e733f-ae2f-4480-80ee-f5e90c9bd8f8.jpeg" width="400"></p>
 
