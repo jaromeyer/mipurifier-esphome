@@ -152,13 +152,16 @@ sensor:
       - name: "Air quality (PM2.5)"
         unit_of_measurement: "µg/m³"
         device_class: pm25
+        state_class: "measurement"
       - name: "Humidity"
         unit_of_measurement: "%"
         device_class: humidity
+        state_class: "measurement"
       - name: "Temperature"
         unit_of_measurement: "°C"
         device_class: temperature
         accuracy_decimals: 1
+        state_class: "measurement"
       - name: "Filter remaining"
         unit_of_measurement: "%"
         icon: mdi:air-filter
