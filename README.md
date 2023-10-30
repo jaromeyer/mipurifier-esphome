@@ -30,7 +30,7 @@ The following steps have been tested with the AC-M6-B01 Board (REV3-BDR) by usin
 - Prepare an usb-to-serial adapter (a CP2102 chip has been used here) by installing the required drivers on the computer you will flash the board
 - Pull GPIO0 low by bridging soldering spot 1 (GPIO0) and 2 (GND) 
   - No need to solder here if you have a wire that fits more or less tight into the soldering spot
-- Pull GPIO2 low by soldering Pin 24 (GPIO2) and GND (Pin 15 or spot 1 or spot 2) together with a thin wire
+- Pull GPIO2 low by connecting Pin 24 (GPIO2) to GND (e.g., Pin 15, spot 1, or spot 2)
 - Open Home Assistant on any client machine via Web Browser using https
   - A Windows 10 client was used here while Home Assistant was running on a different machine
   - Your browser must support WebSerial to flash from a different client than the ESPHome Server. Chrome do support WebSerial.
@@ -46,7 +46,7 @@ The following steps have been tested with the AC-M6-B01 Board (REV3-BDR) by usin
 - Connect the usb-to-serial adapter with the board as shown on the image below
 - Plug in the usb-to-serial adapter on the client machine
   - The board will beep two times on powering up
-  - If it does not - you may need to power it externally as the USB/TTL adapter may not be powerful enough
+  - If it does not - you may need to power it externally as the USB/TTL adapter may not be powerful enough (IMPORTANT: first disconnect VCC from the USB/TTL adapter)
 - Use "Install" on the device tile within the 3 dots and select "Plug into this computer" and follow the further instructions
 - After the install process has been finished, detach the usb-to-serial adapter from the client
 - Remove the bridges both for GPIO0 and GPIO2
