@@ -54,7 +54,7 @@ custom_component:
 
 fan:
   - platform: template
-    name: "Zasilanie"
+    name: "Power"
     id: XiaomiPurifierFan
     speed_count: 15
     preset_modes:
@@ -79,7 +79,7 @@ fan:
     on_speed_set:
       - lambda: |-
           auto c = static_cast<MiPurifier *>(mipurifier);
-          c->set_mode("manual");
+          # c->set_mode("manual"); #Does not work, need to investigate.
           c->set_manualspeed((int)x-1);
 
 # Main switch for turning on/off the unit
