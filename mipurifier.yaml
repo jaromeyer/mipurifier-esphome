@@ -114,20 +114,6 @@ switch:
 # Select components for mode & brightness
 select:
   - platform: template
-    name: "Mode"
-    id: mode_select
-    options:
-      - "auto"
-      - "night"
-      - "manual"
-      - "low"
-      - "medium"
-      - "high"
-    set_action:
-      - lambda: |-
-          auto c = static_cast<MiPurifier *>(mipurifier);
-          c->set_mode(x);
-  - platform: template
     name: "Display Brightness"
     id: brightness_select
     icon: mdi:brightness-6
@@ -140,20 +126,6 @@ select:
       - lambda: |-
           auto c = static_cast<MiPurifier *>(mipurifier);
           c->set_brightness(x);
-
-# Number to control the speed in manual mode
-number:
-  - platform: template
-    name: "Manual Speed"
-    id: manualspeed
-    icon: mdi:speedometer
-    min_value: 1
-    max_value: 15
-    step: 1
-    set_action:
-      - lambda: |-
-          auto c = static_cast<MiPurifier *>(mipurifier);
-          c->set_manualspeed((int)x-1);
 
 # Expose measured environmental values, and remaining filter life
 sensor:
