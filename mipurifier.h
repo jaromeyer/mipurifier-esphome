@@ -109,19 +109,23 @@ public:
       filterlife_sensor->publish_state(atof(val));
     } else if (strcmp(id, "22") == 0) {
       // power (on, off)
-      power_switch->publish_state(strcmp(val, "true") == 0);
+      if (strcmp(val, "true") == 0) {
+        XiaomiPurifierFan->turn_on();
+      } else {
+        XiaomiPurifierFan->turn_off();
+      }
     } else if (strcmp(id, "25") == 0) {
       // mode (auto, night, manual, preset)
       is_preset = false;
       switch (atoi(val)) {
         case 0:
-          mode_select->publish_state("auto");
+          XiaomiPurifierFan->preset_mode = "auto";
           break;
         case 1:
-          mode_select->publish_state("night");
+          XiaomiPurifierFan->preset_mode = "night";
           break;
         case 2:
-          mode_select->publish_state("manual");
+          XiaomiPurifierFan->preset_mode = "manual";
           break;
         case 3:
           is_preset = true;
@@ -132,13 +136,13 @@ public:
       if (is_preset) {
         switch (atoi(val)) {
           case 1:
-            mode_select->publish_state("low");
+            XiaomiPurifierFan->preset_mode = "low";
             break;
           case 2:
-            mode_select->publish_state("medium");
+            XiaomiPurifierFan->preset_mode = "medium";
             break;
           case 3:
-            mode_select->publish_state("high");
+            XiaomiPurifierFan->preset_mode = "high";
             break;
         }
       }
@@ -163,7 +167,7 @@ public:
       }
     } else if (strcmp(id, "1010") == 0) {
       // manual speed
-      manualspeed->publish_state(atof(val)+1);
+      XiaomiPurifierFan->speed = atof(val)+1;
     }
   }
 
