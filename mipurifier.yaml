@@ -52,6 +52,7 @@ custom_component:
     components:
       - id: mipurifier
 
+# Main component for controlling the purifier
 fan:
   - platform: template
     name: "Power"
@@ -82,7 +83,7 @@ fan:
           # c->set_mode("manual"); #Does not work, need to investigate.
           c->set_manualspeed((int)x-1);
 
-# Main switch for turning on/off the unit
+# Config settings
 switch:
   - platform: template
     name: "Beeper"
