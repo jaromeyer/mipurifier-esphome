@@ -110,41 +110,47 @@ public:
     } else if (strcmp(id, "22") == 0) {
       // power (on, off)
       if (strcmp(val, "true") == 0) {
-        XiaomiPurifierFan->turn_on();
+        auto call = XiaomiPurifierFan->turn_on();
+        call.perform();
       } else {
-        XiaomiPurifierFan->turn_off();
+        auto call = XiaomiPurifierFan->turn_off();
+        call.perform();
       }
     } else if (strcmp(id, "25") == 0) {
       // mode (auto, night, manual, preset)
       is_preset = false;
+      auto call = XiaomiPurifierFan->make_call();
       switch (atoi(val)) {
-        case 0:
-          XiaomiPurifierFan->preset_mode = "auto";
+        case 0: 
+          call.set_preset_mode("auto");
           break;
         case 1:
-          XiaomiPurifierFan->preset_mode = "night";
+          call.set_preset_mode("night");
           break;
         case 2:
-          XiaomiPurifierFan->preset_mode = "manual";
+          call.set_preset_mode("manual");
           break;
         case 3:
           is_preset = true;
           break;
       }
+      call.perform();
     } else if (strcmp(id, "24") == 0) {
       // preset (low, medium, high)
       if (is_preset) {
+        auto call = XiaomiPurifierFan->make_call();
         switch (atoi(val)) {
           case 1:
-            XiaomiPurifierFan->preset_mode = "low";
+            call.set_preset_mode("low");
             break;
           case 2:
-            XiaomiPurifierFan->preset_mode = "medium";
+            call.set_preset_mode("medium");
             break;
           case 3:
-            XiaomiPurifierFan->preset_mode = "high";
+            call.set_preset_mode("high");
             break;
         }
+        call.perform();
       }
     } else if (strcmp(id, "51") == 0) {
       // beeper (on, off)
