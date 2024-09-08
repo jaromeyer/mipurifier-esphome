@@ -52,31 +52,58 @@ custom_component:
     components:
       - id: mipurifier
 
-# Main switch for turning on/off the unit
-switch:
+# Main component for controlling the purifier
+fan:
   - platform: template
     name: "Power"
-    id: power_switch
-    icon: mdi:power
-    turn_on_action:
-      - lambda:
+    id: XiaomiPurifierFan
+    speed_count: 15
+    preset_modes:
+      - "auto"
+      - "night"
+      - "low"
+      - "medium"
+      - "high"
+      - "manual"
+    on_turn_on:
+      - lambda: |-
           auto c = static_cast<MiPurifier *>(mipurifier);
           c->turn_on();
-    turn_off_action:
-      - lambda:
+    on_turn_off:
+      - lambda: |-
           auto c = static_cast<MiPurifier *>(mipurifier);
           c->turn_off();
+    on_preset_set:
+      - lambda: |-
+          auto c = static_cast<MiPurifier *>(mipurifier);
+          if (!id(XiaomiPurifierFan).state) {
+            c->set_mode(x);
+            c->turn_off();
+          } else {
+            c->set_mode(x);
+          }
+    on_speed_set:
+      - lambda: |-
+          auto c = static_cast<MiPurifier *>(mipurifier);
+          c->set_manualspeed((int)x-1);
+      - delay: 1s
+      - lambda: |-
+          auto c = static_cast<MiPurifier *>(mipurifier);
+          c->set_mode("manual");
+
+# Config settings
+switch:
   - platform: template
     name: "Beeper"
     id: beeper_switch
     icon: mdi:volume-high
     entity_category: config
     turn_on_action:
-      - lambda:
+      - lambda: |-
           auto c = static_cast<MiPurifier *>(mipurifier);
           c->enable_beeper();
     turn_off_action:
-      - lambda:
+      - lambda: |-
           auto c = static_cast<MiPurifier *>(mipurifier);
           c->disable_beeper();
   - platform: template
@@ -85,30 +112,16 @@ switch:
     icon: mdi:lock
     entity_category: config
     turn_on_action:
-      - lambda:
+      - lambda: |-
           auto c = static_cast<MiPurifier *>(mipurifier);
           c->lock();
     turn_off_action:
-      - lambda:
+      - lambda: |-
           auto c = static_cast<MiPurifier *>(mipurifier);
           c->unlock();
 
 # Select components for mode & brightness
 select:
-  - platform: template
-    name: "Mode"
-    id: mode_select
-    options:
-      - "auto"
-      - "night"
-      - "manual"
-      - "low"
-      - "medium"
-      - "high"
-    set_action:
-      - lambda: |-
-          auto c = static_cast<MiPurifier *>(mipurifier);
-          c->set_mode(x);
   - platform: template
     name: "Display Brightness"
     id: brightness_select
@@ -122,20 +135,6 @@ select:
       - lambda: |-
           auto c = static_cast<MiPurifier *>(mipurifier);
           c->set_brightness(x);
-
-# Number to control the speed in manual mode
-number:
-  - platform: template
-    name: "Manual Speed"
-    id: manualspeed
-    icon: mdi:speedometer
-    min_value: 1
-    max_value: 15
-    step: 1
-    set_action:
-      - lambda: |-
-          auto c = static_cast<MiPurifier *>(mipurifier);
-          c->set_manualspeed((int)x-1);
 
 # Expose measured environmental values, and remaining filter life
 sensor:
