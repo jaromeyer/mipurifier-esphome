@@ -13,6 +13,7 @@ esp32:
       CONFIG_FREERTOS_UNICORE: y
     advanced:
       ignore_efuse_mac_crc: true
+      ignore_efuse_custom_mac: true
 
 # Enable logging
 logger:
