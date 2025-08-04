@@ -1,3 +1,6 @@
+> **⚠️ Warning:**  
+> This repository is no longer maintained. Please consider using [https://github.com/dhewg/esphome-miot](https://github.com/dhewg/esphome-miot), which also supports a greater variety of devices, instead.
+> However, this repoand especially the many issues may still contain valuable information.
 ## ESPHome for various Xiaomi Air Purification Devices
 
 > For a step-by-step guide with pictures visit [this thread](https://community.home-assistant.io/t/link-xiaomi-air-purifier-3-3h-with-custom-esphome-firmware/656741/9) on the official home assistant forum.
